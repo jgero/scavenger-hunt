@@ -36,13 +36,19 @@
 
 <div class="container">
   <header>
-    <h1 in:fly={{ x: -200, duration: 1500, delay: 800 }}>
+    <h1
+      in:fly={{ x: -200, duration: 1500, delay: 800 }}
+      out:fly={{ x: -200, duration: 200, delay: 0 }}>
       johannes
       <br />
       gerold
     </h1>
-    <div in:fly={{ x: -200, duration: 1500, delay: 1000 }} />
-    <h2 in:fly={{ x: -200, duration: 1500, delay: 1200 }}>
+    <div
+      in:fly={{ x: -200, duration: 1500, delay: 1000 }}
+      out:fly={{ x: -200, duration: 200, delay: 50 }} />
+    <h2
+      in:fly={{ x: -200, duration: 1500, delay: 1200 }}
+      out:fly={{ x: -200, duration: 200, delay: 100 }}>
       web developer,
       <br />full stack.
     </h2>

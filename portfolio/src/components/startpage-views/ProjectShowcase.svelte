@@ -63,7 +63,7 @@
 
 <div class="wrapper">
   <section>
-    <header>
+    <header out:fly={{ x: -200, duration: 200 }}>
       <h1>
         <h1 in:fly={{ x: -200, duration: 1500, delay: 0 }}>project showcase</h1>
         <div in:fly={{ x: -200, duration: 1500, delay: 200 }} class="spacer" />
@@ -86,7 +86,7 @@
         webpage</a>
     </div>
   </section>
-  <figure>
+  <figure out:fly={{ x: 200, y: -200, duration: 200 }}>
     <img
       in:fly={{ x: 200, y: -200, duration: 1500, delay: 400 }}
       src={image1}
