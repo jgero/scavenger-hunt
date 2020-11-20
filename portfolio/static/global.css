@@ -1,0 +1,53 @@
+html, body, #sapper {
+  width: 100%;
+  height: 100%;
+  background-color: var(--light-5);
+}
+
+#sapper {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  color: var(--dark-2);
+}
+
+:root {
+  /* color palette */
+  --dark-1: #000000;
+  --dark-2: #3F4367;
+  --dark-3: #505686;
+  --dark-4: #686FAB;
+  --dark-5: #848CD3;
+  --light-1: #939DFF;
+  --light-2: #A8B1FF;
+  --light-3: #BEC5FF;
+  --light-4: #DEE4FA;
+  --light-5: #F8FBFF;
+}
+
+h1, h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 300;
+}
+
+h1 {
+  color: var(--dark-2);
+  font-size: 4rem;
+  text-transform: uppercase;
+}
+
+h2 {
+  color: var(--dark-3);
+  font-size: 2.1rem;
+}
+
+a {
+	color: inherit;
+  text-decoration: none;
+}
+
