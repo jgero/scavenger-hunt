@@ -1,6 +1,7 @@
-.PHONY: dev build_dev run_dev
+.PHONY: dev build_dev run_dev prod build_prod run_prod
 
 dev: build_dev run_dev
+prod: build_prod run_prod
 
 build_dev:
 	docker build \
@@ -18,3 +19,16 @@ run_dev:
 		-p 3000:3000 \
 		-p 10000:10000 \
 		my-webpage/portfolio:dev
+
+build_prod:
+	docker build \
+		-t my-webpage/portfolio:latest \
+		-f ./container/prod.Dockerfile \
+		.
+
+run_prod:
+	docker run \
+		--rm \
+		--tty \
+		-p 3000:3000 \
+		my-webpage/portfolio:latest
