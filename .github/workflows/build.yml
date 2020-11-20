@@ -18,4 +18,5 @@ jobs:
           repository: jgero/my-webpage/portfolio
           context: ./portfolio
           file: ./portfolio/container/prod.Dockerfile
+          push: true
           tag_with_ref: true
