@@ -24,7 +24,9 @@
     fragment = window.location.hash;
   }
 
+  let timer;
   function onScroll(ev) {
+    clearTimeout(timer);
     const currentPageIndex = pages.findIndex((el) => el === fragment);
     if (ev.deltaY > 0) {
       // scroll down
@@ -32,14 +34,20 @@
         // when already at the last page do nothing
         return;
       }
-      window.location.hash = pages[currentPageIndex + 1];
+      timer = setTimeout(
+        () => (window.location.hash = pages[currentPageIndex + 1]),
+        100
+      );
     } else {
       // scroll up
       if (currentPageIndex === 0) {
         // when already at the first page do nothing
         return;
       }
-      window.location.hash = pages[currentPageIndex - 1];
+      timer = setTimeout(
+        () => (window.location.hash = pages[currentPageIndex - 1]),
+        100
+      );
     }
   }
 </script>

@@ -1,3 +1,8 @@
+<script>
+  import { fly } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
+</script>
+
 <style>
   .container {
     position: relative;
@@ -29,16 +34,19 @@
     top: 150px;
     left: 0px;
     z-index: 3;
+    /* animation: cloud1 2s ease-out; */
   }
   .cloud-2 {
     top: 0px;
     left: 200px;
     z-index: 1;
+    /* animation: cloud2 2s ease-out; */
   }
   .cloud-3 {
     top: 100px;
     left: 350px;
     z-index: 2;
+    /* animation: cloud3 2s ease-out; */
   }
 
   .positioning-helper {
@@ -77,10 +85,41 @@
     width: 300px;
     height: 150px;
   }
+
+  @keyframes cloud1 {
+    0% {
+      transform: translateX(-80%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 0.75;
+    }
+  }
+  @keyframes cloud2 {
+    0% {
+      transform: translateX(40%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 0.75;
+    }
+  }
+  @keyframes cloud3 {
+    0% {
+      transform: translateX(90%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 0.75;
+    }
+  }
 </style>
 
 <div class="container">
-  <div class="cloud-1">
+  <div in:fly={{ x: -500, duration: 2000, easing: quintOut }} class="cloud-1">
     <div class="positioning-helper">
       <div class="circle" />
       <div class="circle" />
@@ -89,7 +128,7 @@
       <div class="rectangle" />
     </div>
   </div>
-  <div class="cloud-2">
+  <div in:fly={{ x: 200, duration: 2000, easing: quintOut }} class="cloud-2">
     <div class="positioning-helper">
       <div class="circle" />
       <div class="circle" />
@@ -98,7 +137,7 @@
       <div class="rectangle" />
     </div>
   </div>
-  <div class="cloud-3">
+  <div in:fly={{ x: 500, duration: 2000, easing: quintOut }} class="cloud-3">
     <div class="positioning-helper">
       <div class="circle" />
       <div class="circle" />
