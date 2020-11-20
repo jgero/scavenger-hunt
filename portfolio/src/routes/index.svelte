@@ -1,6 +1,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import Landingpage from "../components/startpage-views/Landingpage.svelte";
+  import ProjectShowcase from "../components/startpage-views/ProjectShowcase.svelte";
 
   let fragment;
   const pages = ["#top", "#project_showcase", "#about_me", "#contact_me"];
@@ -62,7 +63,7 @@
 {#if fragment === '#top'}
   <Landingpage />
 {:else if fragment === '#project_showcase'}
-  <h1>project showcase</h1>
+  <ProjectShowcase />
 {:else if fragment === '#about_me'}
   <h1>about me</h1>
 {:else if fragment === '#contact_me'}

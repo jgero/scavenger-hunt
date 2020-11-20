@@ -5,7 +5,9 @@
 
   onMount(() => {
     window.addEventListener("hashchange", updateFragment);
-    window.location.hash = "top";
+    if (!window.location.hash) {
+      window.location.hash = "top";
+    }
   });
 
   onDestroy(() => {

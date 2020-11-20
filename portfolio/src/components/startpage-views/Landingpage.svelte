@@ -16,11 +16,6 @@
     margin: 1rem 0;
   }
 
-  /* h1 { */
-  /*   opacity: 0; */
-  /*   animation: slideInLeft 1s ease-out 1s; */
-  /* } */
-
   header {
     grid-area: header;
     width: min-content;
@@ -36,17 +31,6 @@
   figure {
     grid-area: clouds;
     margin: 0;
-  }
-
-  @keyframes slideInLeft {
-    0% {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
   }
 </style>
 
