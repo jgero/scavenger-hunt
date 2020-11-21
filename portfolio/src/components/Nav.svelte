@@ -31,7 +31,7 @@
 
 <nav>
   <ul>
-    <li><a href="/">johannes gerold</a></li>
+    <li><a href="/#top">johannes gerold</a></li>
     <li><a href="/#contact_me">contact me</a></li>
     <li>
       <a href="https://github.com/jgero" target="_blank">

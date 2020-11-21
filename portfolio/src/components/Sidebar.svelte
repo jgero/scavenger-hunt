@@ -7,6 +7,8 @@
     window.addEventListener("hashchange", updateFragment);
     if (!window.location.hash) {
       window.location.hash = "top";
+    } else {
+      fragment = window.location.hash;
     }
   });
 

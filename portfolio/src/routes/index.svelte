@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import Landingpage from "../components/startpage-views/Landingpage.svelte";
   import ProjectShowcase from "../components/startpage-views/ProjectShowcase.svelte";
+  import AboutMe from "../components/startpage-views/AboutMe.svelte";
 
   let fragment;
   const pages = ["#top", "#project_showcase", "#about_me", "#contact_me"];
@@ -65,7 +66,7 @@
 {:else if fragment === '#project_showcase'}
   <ProjectShowcase />
 {:else if fragment === '#about_me'}
-  <h1>about me</h1>
+  <AboutMe />
 {:else if fragment === '#contact_me'}
   <h1>contact me</h1>
 {/if}
