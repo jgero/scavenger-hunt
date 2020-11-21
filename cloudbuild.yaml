@@ -22,4 +22,4 @@ steps:
   - 'managed'
 timeout: 140s
 images:
-- 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA']
+- 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA'
