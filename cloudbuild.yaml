@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/portfolio', '-f', './container/prod.Dockerfile', '.']
+  dir: 'portfolio'
+  timeout: 300s
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/portfolio']
+timeout: 400s
+images: ['gcr.io/$PROJECT_ID/portfolio']
