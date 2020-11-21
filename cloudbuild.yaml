@@ -8,18 +8,18 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA']
 # deploy portfolio image to Cloud Run
- - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-   entrypoint: gcloud
-   args:
-   - 'run'
-   - 'deploy'
-   - 'portfolio-page'
-   - '--image'
-   - 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA'
-   - '--region'
-   - 'europe-west1'
-   - '--platform'
-   - 'managed'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'portfolio-page'
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA'
+  - '--region'
+  - 'europe-west1'
+  - '--platform'
+  - 'managed'
 timeout: 140s
 images: 
-   - 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA']
+- 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA']
