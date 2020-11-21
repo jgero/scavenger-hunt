@@ -1,12 +1,12 @@
 steps:
 # build the portfolio image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/portfolio', '-f', './container/prod.Dockerfile', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/portfolio-page', '-f', './container/prod.Dockerfile', '.']
   dir: 'portfolio'
   timeout: 120s
 # push the portfolio image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/portfolio']
+  args: ['push', 'gcr.io/$PROJECT_ID/portfolio-page']
 # deploy portfolio image to Cloud Run
  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    entrypoint: gcloud
@@ -15,10 +15,10 @@ steps:
    - 'deploy'
    - 'portfolio-page'
    - '--image'
-   - 'gcr.io/$PROJECT_ID/portfolio'
+   - 'gcr.io/$PROJECT_ID/portfolio-page'
    - '--region'
    - 'europe-west1'
    - '--platform'
    - 'managed'
 timeout: 140s
-images: ['gcr.io/$PROJECT_ID/portfolio']
+images: ['gcr.io/$PROJECT_ID/portfolio-page']
