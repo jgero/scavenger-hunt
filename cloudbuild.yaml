@@ -20,6 +20,6 @@ steps:
   - 'europe-west1'
   - '--platform'
   - 'managed'
-timeout: 140s
+timeout: 300s
 images:
 - 'gcr.io/$PROJECT_ID/portfolio-page:$COMMIT_SHA'
