@@ -12,13 +12,13 @@ export async function post(req, res) {
   try {
     // access the secrets from google cloud
     const [accessResponseAddress] = await client.accessSecretVersion({
-      name: "contact-bot-email-address",
+      name: "projects/webpage-jgero/secrets/contact-bot-email-address",
     });
     responsePayloadAddress = accessResponseAddress.payload.data.toString(
       "utf8"
     );
     const [accessResponsePassword] = await client.accessSecretVersion({
-      name: "contact-bot-email-password",
+      name: "projects/webpage-jgero/secrets/contact-bot-email-password",
     });
     responsePayloadPassword = accessResponsePassword.payload.data.toString(
       "utf8"
