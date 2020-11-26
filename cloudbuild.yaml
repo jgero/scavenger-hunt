@@ -63,6 +63,6 @@ steps:
   - '--platform'
   - 'managed'
 images:
-- 'gcr.io/$PROJECT_ID/portfolio-page:latest'
-- 'gcr.io/$PROJECT_ID/space-page:latest'
-- 'gcr.io/$PROJECT_ID/main-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/portfolio-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/space-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/main-page:latest'
