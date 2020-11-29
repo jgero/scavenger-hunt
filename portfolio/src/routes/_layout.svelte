@@ -1,32 +1,23 @@
 <script>
   import { stores } from "@sapper/app";
   const { page } = stores();
-
   import Nav from "../components/Nav.svelte";
-  import Sidebar from "../components/Sidebar.svelte";
-
   export let segment;
+
+  let hasShadow;
+  $: hasShadow = segment || $page.error;
 </script>
 
 <style>
   main {
-    display: flex;
+    position: absolute;
+    width: 100%;
     height: 100%;
+    box-sizing: border-box;
+    padding-top: 4rem;
     overflow: hidden;
-  }
-
-  div {
-    flex: 1;
   }
 </style>
 
-<Nav />
-
-<main>
-  {#if !segment & !$page.error}
-    <Sidebar />
-  {/if}
-  <div>
-    <slot />
-  </div>
-</main>
+<Nav {hasShadow} />
+<slot />

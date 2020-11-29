@@ -1,5 +1,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import { fly } from "svelte/transition";
+  import Sidebar from "../components/Sidebar.svelte";
   import Landingpage from "../components/startpage-views/Landingpage.svelte";
   import ProjectShowcase from "../components/startpage-views/ProjectShowcase.svelte";
   import AboutMe from "../components/startpage-views/AboutMe.svelte";
@@ -56,14 +58,32 @@
 </script>
 
 <style>
+  main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 4rem;
+    overflow: hidden;
+    display: flex;
+  }
+
+  div {
+    flex: 1;
+  }
 </style>
 
-{#if fragment === '#top'}
-  <Landingpage />
-{:else if fragment === '#project_showcase'}
-  <ProjectShowcase />
-{:else if fragment === '#about_me'}
-  <AboutMe />
-{:else if fragment === '#contact_me'}
-  <ContactMe />
-{/if}
+<main out:fly={{ x: -200, duration: 200 }}>
+  <Sidebar />
+  <div>
+    {#if fragment === '#top'}
+      <Landingpage />
+    {:else if fragment === '#project_showcase'}
+      <ProjectShowcase />
+    {:else if fragment === '#about_me'}
+      <AboutMe />
+    {:else if fragment === '#contact_me'}
+      <ContactMe />
+    {/if}
+  </div>
+</main>
