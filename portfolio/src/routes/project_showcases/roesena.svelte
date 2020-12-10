@@ -3,14 +3,15 @@
   import Technologies from "../../components/project-showcases/roesena/Technologies.svelte";
   import Features from "../../components/project-showcases/roesena/Features.svelte";
 
-  import image1 from "images/portfolio_project_1.png";
-  import image2 from "images/roesena_mobile.png";
+  import image1 from "../../../static/images/portfolio_project_1.png";
+  import image2 from "../../../static/images/roesena_mobile.png";
 </script>
 
 <style>
   main {
     position: absolute;
     overflow-y: auto;
+    overflow-x: hidden;
     top: 4rem;
     height: calc(100% - 4rem);
     width: 100%;
@@ -73,8 +74,11 @@
       <h2 in:fly={{ duration: 1500, x: -200, delay: 400 }}>
         web-app for a carnival club
       </h2>
-      <a href="https://rösena.de" class="button stroked" target="_blank">visit
-        webpage</a>
+      <a
+        in:fly={{ duration: 1500, x: -200, delay: 600 }}
+        href="https://rösena.de"
+        class="button stroked"
+        target="_blank">visit webpage</a>
     </header>
 
     <figure in:fly={{ duration: 1500, x: 200 }}>
