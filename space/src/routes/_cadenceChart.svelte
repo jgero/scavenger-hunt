@@ -8,8 +8,8 @@
     // go through the launches and start at the second one to always have a previous one to compare it to
     for (let i = 1; i < launches.length; i++) {
       // get date objects from launches
-      const datePreviousLaunch = new Date(launches[i - 1].launch_date_utc);
-      const dateCurrentLaunch = new Date(launches[i].launch_date_utc);
+      const datePreviousLaunch = new Date(launches[i - 1].date_utc);
+      const dateCurrentLaunch = new Date(launches[i].date_utc);
       intervals.push(
         Math.floor(
           (dateCurrentLaunch - datePreviousLaunch) / 1000 / 60 / 60 / 24
@@ -79,9 +79,15 @@
     padding: 32px;
     box-sizing: border-box;
   }
+  @media screen and (max-width: 600px) {
+    figure {
+      flex-direction: column;
+      padding: 1rem;
+    }
+  }
 
   figcaption {
-    width: 400px;
+    max-width: 400px;
   }
 
   figcaption > h3 {
@@ -94,7 +100,7 @@
     color: #f1c46d;
   }
   #cadenceChart {
-    width: 40vw;
+    min-width: 40vw;
   }
   :global(.apexcharts-tooltip) {
     color: black;
