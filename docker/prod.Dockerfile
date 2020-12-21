@@ -1,12 +1,12 @@
 # This stage builds the sapper application.
-FROM node:10 AS build-app
+FROM node:10 AS app-builder
 WORKDIR /app
 COPY . .
 RUN npm install --no-audit --unsafe-perm
 RUN npm run build
 
 # This stage installs the runtime dependencies.
-FROM node:10 AS build-runtime
+FROM node:10 AS runtime-builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --production --unsafe-perm
