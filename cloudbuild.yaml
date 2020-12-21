@@ -1,18 +1,48 @@
+# ---------------------------------------------------------------------------------------
+# ------------------------------- CLOUDBUILD CONFIG -------------------------------------
+# ---------------------------------------------------------------------------------------
+# The production version of these sapper apps use a multi staged docker build. To improve
+# build times caching is used, but docker currently does not really support caching for
+# multi staged docker builds. When building normally only the final image gets cached.
+# By incrementally building the steps with targets, tagging the builder steps, pushing
+# these intermediate images and using them as cache in the build, caching works for
+# such multi staged builds too.
+# ---------------------------------------------------------------------------------------
 steps:
-# get latest version of the portfolio image from the registry (for build cache)
+# ---------------------------------------------------------------------------------------
+# --------------------------- BUILD PORTFOLIO IMAGE -------------------------------------
+# ---------------------------------------------------------------------------------------
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
-  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/portfolio-page:latest || exit 0']
-# build the portfolio image
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-          'build',
-          '-t', 'eu.gcr.io/$PROJECT_ID/portfolio-page:latest',
-          '-f', './docker/prod.Dockerfile',
-          '--cache-from', 'eu.gcr.io/$PROJECT_ID/portfolio-page:latest',
-          './portfolio'
-        ]
-  timeout: 120s
+  args:
+    - '-c'
+    - |
+      docker pull eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/portfolio-page-runtime-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/portfolio-page:latest || true
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target app-builder \
+          ./portfolio
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/portfolio-page-runtime-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target runtime-builder \
+          ./portfolio
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/portfolio-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/portfolio-page:latest \
+          -f ./docker/prod.Dockerfile \
+          ./portfolio
 # push the portfolio image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'eu.gcr.io/$PROJECT_ID/portfolio-page:latest']
@@ -29,20 +59,40 @@ steps:
   - 'europe-west1'
   - '--platform'
   - 'managed'
-# get latest version of the space image from the registry (for build cache)
+# ---------------------------------------------------------------------------------------
+# ------------------------------- BUILD SPACE IMAGE -------------------------------------
+# ---------------------------------------------------------------------------------------
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
-  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/space-page:latest || exit 0']
-# build the space image
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-          'build',
-          '-t', 'eu.gcr.io/$PROJECT_ID/space-page:latest', 
-          '-f', './docker/prod.Dockerfile', 
-          '--cache-from', 'eu.gcr.io/$PROJECT_ID/space-page:latest',
-          './space'
-        ]
-  timeout: 120s
+  args:
+    - '-c'
+    - |
+      docker pull eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/space-page-runtime-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/space-page:latest || true
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target app-builder \
+          ./space
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/space-page-runtime-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target runtime-builder \
+          ./space
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/space-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/space-page:latest \
+          -f ./docker/prod.Dockerfile \
+          ./space
 # push the space image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'eu.gcr.io/$PROJECT_ID/space-page:latest']
@@ -59,24 +109,44 @@ steps:
   - 'europe-west1'
   - '--platform'
   - 'managed'
-# get latest version of the main image from the registry (for build cache)
+# ---------------------------------------------------------------------------------------
+# ----------------------------- BUILD MAIN PAGE IMAGE -----------------------------------
+# ---------------------------------------------------------------------------------------
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
-  args: ['-c', 'docker pull eu.gcr.io/$PROJECT_ID/main-page:latest || exit 0']
-# build the main image
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-          'build', 
-          '-t', 'eu.gcr.io/$PROJECT_ID/main-page:latest',
-          '-f', './docker/prod.Dockerfile',
-          '--cache-from', 'eu.gcr.io/$PROJECT_ID/main-page:latest',
-          './main'
-        ]
-  timeout: 120s
+  args:
+    - '-c'
+    - |
+      docker pull eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/main-page-runtime-builder:latest || true
+      docker pull eu.gcr.io/$PROJECT_ID/main-page:latest || true
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target app-builder \
+          ./main
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/main-page-runtime-builder:latest \
+          -f ./docker/prod.Dockerfile \
+          --target runtime-builder \
+          ./main
+
+      docker build \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest \
+          --cache-from eu.gcr.io/$PROJECT_ID/main-page-runtime-builder:latest \
+          -t eu.gcr.io/$PROJECT_ID/main-page:latest \
+          -f ./docker/prod.Dockerfile \
+          ./main
 # push the main image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'eu.gcr.io/$PROJECT_ID/main-page:latest']
-# deploy space image to Cloud Run
+# deploy main image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
@@ -91,5 +161,11 @@ steps:
   - 'managed'
 images:
 - 'eu.gcr.io/$PROJECT_ID/portfolio-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/portfolio-page-app-builder:latest'
+- 'eu.gcr.io/$PROJECT_ID/portfolio-page-runtime-builder:latest'
 - 'eu.gcr.io/$PROJECT_ID/space-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/space-page-app-builder:latest'
+- 'eu.gcr.io/$PROJECT_ID/space-page-runtime-builder:latest'
 - 'eu.gcr.io/$PROJECT_ID/main-page:latest'
+- 'eu.gcr.io/$PROJECT_ID/main-page-app-builder:latest'
+- 'eu.gcr.io/$PROJECT_ID/main-page-runtime-builder:latest'
