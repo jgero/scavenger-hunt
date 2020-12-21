@@ -15,9 +15,9 @@ RUN npm ci --production --unsafe-perm
 # and the runtime dependencies.
 FROM node:10-alpine
 WORKDIR /app
-COPY --from=build-app /app/__sapper__ ./__sapper__
-COPY --from=build-app /app/static ./static
-COPY --from=build-runtime /app/node_modules ./node_modules
+COPY --from=app-builder /app/__sapper__ ./__sapper__
+COPY --from=app-builder /app/static ./static
+COPY --from=runtime-builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["node", "__sapper__/build"]
