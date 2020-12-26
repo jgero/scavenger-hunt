@@ -16,7 +16,7 @@
     {
       icon: "code",
       text: `Programming is the largest part of my life. Most of the time I work with Web-Aplications,
-            because I love the web fIor the open plattform it is.`,
+            because I love the web for the open plattform it is.`,
     },
   ];
 </script>
@@ -37,7 +37,12 @@
     border-radius: 2rem;
     padding: 2rem;
     width: calc(var(--max-text-width) * 0.7);
-    margin-bottom: calc(var(--box-spacing) * 0.5);
+    margin-block-end: calc(var(--box-spacing) * 0.5);
+  }
+  @media screen and (max-width: 600px) {
+    div > section {
+      margin-inline: auto;
+    }
   }
   div > section > span {
     width: calc(var(--max-text-width) / 2);
