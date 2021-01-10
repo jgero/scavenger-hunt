@@ -1,6 +1,7 @@
 <script>
   import { fly } from "svelte/transition";
   import SolarSystemAnimated from "../SolarSystemAnimated.svelte";
+  import SolarSystem from "../SolarSystem.svelte";
 </script>
 
 <style>
@@ -46,21 +47,8 @@
   }
   .animation {
     grid-area: animation;
-    position: relative;
-    width: 100%;
-  }
-  .positioning-helper {
-    position: absolute;
-    top: 25%;
-    right: 30%;
-    transform: scale(1.5);
-  }
-  @media screen and (max-width: 600px) {
-    .positioning-helper {
-      top: 0%;
-      right: -13%;
-      transform: scale(0.5);
-    }
+    display: flex;
+    transform: rotate(-16deg);
   }
 </style>
 
@@ -86,8 +74,6 @@
     in:fly={{ y: 300, duration: 3000 }}
     out:fly={{ y: 300, duration: 200 }}
     class="animation">
-    <div class="positioning-helper">
-      <SolarSystemAnimated />
-    </div>
+    <SolarSystem />
   </div>
 </div>
