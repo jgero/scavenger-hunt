@@ -1,5 +1,8 @@
-import * as sapper from '@sapper/app';
+import * as sapper from "@sapper/app";
+
+// styles for highlight.js syntax highlighting in markdown renderings
+import "highlight.js/styles/github.css";
 
 sapper.start({
-	target: document.querySelector('#sapper')
+  target: document.querySelector("body"),
 });
