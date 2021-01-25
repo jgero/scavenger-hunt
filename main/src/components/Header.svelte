@@ -1,5 +1,6 @@
 <script>
   import Button from "./Button.svelte";
+  import ThemeSwitcher from "../theming/ThemeSwitcher.svelte";
 </script>
 
 <style>
@@ -49,4 +50,5 @@
       style="flat" />
     <Button href="/contact_me" label="contact me" style="flat" />
   </nav>
+  <ThemeSwitcher />
 </header>
