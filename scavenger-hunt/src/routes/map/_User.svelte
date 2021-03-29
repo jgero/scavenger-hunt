@@ -3,6 +3,7 @@
 	import { getMyCoords } from "../../stores/my-coords";
 	import { onMount } from "svelte";
 	import { fly } from "svelte/transition";
+	import { derived } from "svelte/store";
 
 	export let mapRotation;
 
@@ -16,6 +17,7 @@
 	function registerMarker(node) {
 		// position of the marker has to be offset a bit so the tip of the marker points to the exact location on the map
 		const unsubscribeMap = map.subscribe(() => {
+			// redrawing on map change is enough because new location input triggers a map update
 			const coords = $myCoords;
 			if (coords) {
 				const absolutePosition = getPositionOnMap($map, coords);
@@ -27,8 +29,8 @@
 			const absolutePosition = getPositionOnMap($map, $myCoords);
 			node.setAttribute(
 				"transform",
-				`rotate(${360 - rotation}, ${absolutePosition.x - 12}, ${
-					absolutePosition.y - 24
+				`rotate(${360 - rotation}, ${absolutePosition.x}, ${
+					absolutePosition.y
 				})`
 			);
 		});
@@ -39,12 +41,37 @@
 			},
 		};
 	}
+
+	function registerAura(node) {
+		// redrawing on map change is enough because new location input triggers a map update
+		const unsubscribeMap = map.subscribe(() => {
+			const coords = $myCoords;
+			if (coords) {
+				const absolutePosition = getPositionOnMap($map, coords);
+				node.setAttribute("cx", absolutePosition.x);
+				node.setAttribute("cy", absolutePosition.y);
+				node.setAttribute(
+					"r",
+					($map.kmLengthOnMap / 1000) * $myCoords.accuracy
+				);
+			}
+		});
+		return {
+			destroy() {
+				unsubscribeMap();
+			},
+		};
+	}
 </script>
 
 <style>
 	.user {
 		transition: all 0.5s ease;
 		fill: #0f8817;
+	}
+	circle {
+		fill: red;
+		opacity: 0.2;
 	}
 </style>
 
@@ -54,4 +81,5 @@
 		use:registerMarker
 		transition:fly={{ y: -40, duration: 200 }}
 		xlink:href="#user" />
+	<circle use:registerAura />
 {/if}
