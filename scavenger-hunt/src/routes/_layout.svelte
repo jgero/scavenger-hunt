@@ -1,23 +1,31 @@
 <script>
-  import Nav from '../components/Nav.svelte';
-  import Logger from '../components/Logger.svelte';
+    import firebase from 'firebase/app';
+    import { onMount } from 'svelte';
+    import { getUserId } from '../stores/user.js';
+    import Logger from '../components/Logger.svelte';
 
-  export let segment;
+    let userId;
+
+    onMount(() => {
+        // initialize stores
+        userId = getUserId();
+
+        setTimeout(() => {
+            if (!$userId) {
+                userId.reset();
+            }
+        }, 3000);
+
+        // listen to auth state changes to restore login on app open
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                userId.setUserId(user.uid);
+            } else {
+                userId.setUserId(null);
+            }
+        });
+    });
 </script>
 
-<Nav {segment} />
-
-<main>
-  <slot />
-</main>
+<slot />
 <Logger />
-
-<style>
-  main {
-    position: relative;
-    max-width: 56em;
-    padding: 2em;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-</style>
