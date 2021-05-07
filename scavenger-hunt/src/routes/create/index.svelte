@@ -2,10 +2,10 @@
     import firebase from 'firebase/app';
     import { onMount, onDestroy } from 'svelte';
 
-    import RouteHeader from '../components/RouteHeader.svelte';
-    import { getLogger } from '../stores/debug-logger';
-    import { getMyCoords } from '../stores/my-coords';
-    import { getUserId } from '../stores/user';
+    import RouteHeader from '../../components/RouteHeader.svelte';
+    import { getLogger } from '../../stores/debug-logger';
+    import { getMyCoords } from '../../stores/my-coords';
+    import { getUserId } from '../../stores/user';
 
     let logger, myCoords, userId;
     let route, selectedPlace, form;
@@ -71,7 +71,7 @@
                     latitude: parseFloat(latitude),
                     longitude: parseFloat(longitude),
                     name,
-                    id
+                    id,
                 });
             }
             await firebase
@@ -93,18 +93,23 @@
 
     async function deletePlace(place) {
         const { id } = place;
-        route.places = route.places.filter(el => el.id !== id);
+        route.places = route.places.filter((el) => el.id !== id);
         route.lastEdit = new Date();
-        await firebase
-            .firestore()
-            .collection('routes')
-            .doc($userId)
-            .set(route);
+        await firebase.firestore().collection('routes').doc($userId).set(route);
         logger.log({
             logLevel: 'log',
-            message: `route updated`,
+            message: 'updated places',
         });
     }
+
+   async function resetSearchers() {
+        route.searchers = [];
+        await firebase.firestore().collection('routes').doc($userId).set(route);
+        logger.log({
+            logLevel: 'log',
+            message: 'reset searchers',
+        });
+    } 
 
     function useCurrentLocation() {
         selectedPlace.latitude = $myCoords.latitude;
@@ -178,12 +183,15 @@
 {#if route && route.places}
     <ul>
         {#each route.places as place}
-            <li on:click={() => (selectedPlace = place)}>{place.name}
+            <li on:click={() => (selectedPlace = place)}>
+                {place.name}
                 <button on:click={() => deletePlace(place)}>DELETE</button>
-
             </li>
         {/each}
     </ul>
+
+    <p>{route.searchers ? route.searchers.length : 0} suchende sind der Route hinzugefügt</p>
+    <button on:click={resetSearchers}>suchende löschen</button>
 {/if}
 
 <style>
