@@ -3,12 +3,14 @@
     import { onMount, onDestroy } from 'svelte';
 
     import RouteHeader from '../../components/RouteHeader.svelte';
+    import ImageCapture from '../../components/ImageCapture.svelte';
     import { getLogger } from '../../stores/debug-logger';
     import { getMyCoords } from '../../stores/my-coords';
     import { getUserId } from '../../stores/user';
 
     let logger, myCoords, userId;
     let route, selectedPlace, form;
+    let newImageDataUrl;
 
     let unsubSnapshotListener;
     let unsubscribe;
@@ -28,7 +30,7 @@
                 .doc(uid)
                 .onSnapshot(
                     (snapshot) => {
-                        if (snapshot.empty) {
+                        if (snapshot.empty || !snapshot.data()) {
                             logger.log({
                                 logLevel: 'log',
                                 message: 'snapshot of my route is empty',
@@ -79,6 +81,9 @@
                 .collection('routes')
                 .doc($userId)
                 .set(route);
+                console.log(newImageDataUrl)
+            await firebase.storage().ref().child(`${$userId}/${id}`).putString(newImageDataUrl,
+            'data_url');
             logger.log({
                 logLevel: 'log',
                 message: `route updated`,
@@ -127,7 +132,6 @@
             selectedPlace.latitude = '';
             selectedPlace.longitude = '';
         }
-        console.log(selectedPlace);
     }
 
     onDestroy(() => {
@@ -168,6 +172,8 @@
                 required
                 pattern="^[0-9]*\.[0-9]*$"
             />
+
+            <ImageCapture bind:imageDataUrl={newImageDataUrl} />
             <button type="submit">SAVE</button>
             {#if $myCoords}
                 <button type="button" on:click={useCurrentLocation}
