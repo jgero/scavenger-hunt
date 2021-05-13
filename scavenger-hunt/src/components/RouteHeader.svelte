@@ -37,7 +37,8 @@
         display: flex;
         align-items: center;
         height: 4rem;
-        padding: 0 1rem;
+        padding: 0.5rem 1rem;
+        flex: 0;
     }
     h1 {
         font-size: 1rem;

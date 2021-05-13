@@ -79,10 +79,9 @@
 <main>
     <Map {places} {popupState} />
     {#if $popupState.isVisible}
-        <LocationDetails location={$popupState.data} />
+        <LocationDetails location={$popupState.data} routeId={userId} />
     {/if}
 </main>
-<Logger />
 
 <style>
     main {
@@ -90,5 +89,7 @@
         overflow: hidden;
         padding: 1rem;
         box-sizing: border-box;
+        display:flex;
+        flex-direction: column;
     }
 </style>
