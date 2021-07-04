@@ -1,8 +1,10 @@
 <script>
+import firebase from 'firebase/app';
 import { onMount } from "svelte";
 import { getLogger } from "../stores/debug-logger";
 
 export let imageDataUrl;
+export let altImageUrlPromise;
 
 let fileChooserElement;
 let logger;
@@ -29,14 +31,29 @@ function imageInputChanged() {
     }
     fr.readAsDataURL(fileChooserElement.files[0]);
 }
+
 </script>
 
-<input on:change={imageInputChanged} bind:this={fileChooserElement} type="file" accept="image/*">
+<label for="imgSelect" class="material-icons">photo_camera</label>
+<input id="imgSelect" on:change={imageInputChanged} bind:this={fileChooserElement} type="file" accept="image/*">
 {#if imageDataUrl}
     <img src={imageDataUrl} alt="user chosen file">
+{:else}
+	{#await altImageUrlPromise()}
+		<img src="images/placeholder.jpg" alt="missing">
+	{:then url}
+		{#if url}
+			<img src={url} alt="stored file">
+		{:else}
+			<img src="images/placeholder.jpg" alt="missing">
+		{/if}
+	{/await}
 {/if}
 
 <style>
+input {
+	display: none;
+}
 img {
     max-width: 100%
 }

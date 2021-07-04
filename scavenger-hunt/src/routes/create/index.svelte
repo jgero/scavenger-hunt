@@ -134,6 +134,20 @@
         }
     }
 
+	async function getImageForPlace() {
+		let url = null;
+		try {
+            url = await firebase.storage().ref()
+                            .child(`${$userId}/${selectedPlace.id}`).getDownloadURL();
+		} catch (e) {
+			logger.log({
+				logLevel: 'error',
+				message: `could not fetch image: ${JSON.stringify(e)}`,
+			});
+		}
+		return url;
+	}
+
     onDestroy(() => {
         if (unsubSnapshotListener) {
             unsubSnapshotListener();
@@ -194,9 +208,9 @@
                 bind:value={selectedPlace.longitude}
                 required
                 pattern="^[0-9]*\.[0-9]*$"
-            />
+				/>
 
-            <ImageCapture bind:imageDataUrl={newImageDataUrl} />
+            <ImageCapture bind:imageDataUrl={newImageDataUrl} altImageUrlPromise={getImageForPlace} />
             <button type="submit">SAVE</button>
             <button type="button" on:click={() => ( selectedPlace = null )}>CLOSE</button>
                 <button type="button" on:click={() => deletePlace(selectedPlace)}
@@ -214,6 +228,7 @@
 <style>
     main {
     padding: 1rem;
+	overflow: auto;
 }
 ul {
     margin: 0;
