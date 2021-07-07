@@ -161,72 +161,82 @@
 <RouteHeader title="Route bearbeiten" />
 
 <main>
-{#if route && route.places}
-    <h2>Stationen:</h2>
-    <ul>
-        {#each route.places as place}
-            <li on:click={() => (selectedPlace = place)} class:selected={selectedPlace && selectedPlace.id ===
-                    place.id}>
-                {place.name}
-                <button on:click={() => (selectedPlace = place)}><span
-                        class="material-icons">edit</span></button>
-            </li>
-        {/each}
-        <li><button class="align-left"  on:click={setupNewLocation}><span class="material-icons">add</span></button></li>
-    </ul>
-
-    <section>
-        <div>
-    <h2>Teilnehmer: {route.searchers ? route.searchers.length : 0}</h2>
-    <button on:click={resetSearchers}><span class="material-icons">clear</span> RESET</button>
-            </div>
-        <p>Scanne den QR-Code von den Mitspielern um sie deiner Route hinzuzufügen.</p>
-        </section>
-{/if}
+	{#if route && route.places}
+		<ul>
+			<li>
+				<h2>Stationen</h2>
+				<button class="material-icons" on:click={setupNewLocation}>add</button>
+			</li>
+			{#each route.places as place}
+				<li class:selected={selectedPlace && selectedPlace.id === place.id}>
+					{place.name}
+					<button on:click={() => (selectedPlace = place)} class="material-icons">edit</button>
+				</li>
+			{/each}
+			<li>
+				<h2>Teilnehmer: {route.searchers ? route.searchers.length : 0}</h2>
+				<button class="material-icons" on:click={resetSearchers}>person_off</button>
+			</li>
+		</ul>
+	{/if}
 
     {#if selectedPlace}
         <form on:submit|preventDefault={savePlace} bind:this={form}>
-            <input
-                id="name"
-                type="text"
-                bind:value={selectedPlace.name}
-                required
-                pattern="^[0-9a-zA-ZäöüÄÖÜß _-]*$"
-            />
-            <label for="latitude">latitude</label>
-            <input
-                id="latitude"
-                type="text"
-                bind:value={selectedPlace.latitude}
-                required
-                pattern="^[0-9]*\.[0-9]*$"
-            />
-            <label for="longitude">longitude</label>
-            <input
-                id="longitude"
-                type="text"
-                bind:value={selectedPlace.longitude}
-                required
-                pattern="^[0-9]*\.[0-9]*$"
+			<div class="buttonBox">
+				<button type="button" class="material-icons" on:click={() => deletePlace(selectedPlace)}
+					>delete</button
+				>
+				<button type="submit" class="material-icons">save</button>
+				<button type="button" class="material-icons" on:click={() => ( selectedPlace = null
+					)}>close</button>
+			</div>
+			<div class="titleBox">
+				<input
+					id="name"
+					type="text"
+					bind:value={selectedPlace.name}
+					required
+					pattern="^[0-9a-zA-ZäöüÄÖÜß _-]*$"
 				/>
-
-            <ImageCapture bind:imageDataUrl={newImageDataUrl} altImageUrlPromise={getImageForPlace} />
-            <button type="submit">SAVE</button>
-            <button type="button" on:click={() => ( selectedPlace = null )}>CLOSE</button>
-                <button type="button" on:click={() => deletePlace(selectedPlace)}
-                    >DELETE</button
-                >
+			</div>
+			<div class="descriptionBox"></div>
+			<div class="imageBox">
+				<ImageCapture bind:imageDataUrl={newImageDataUrl} altImageUrlPromise={getImageForPlace} />
+			</div>
+			<div class="latBox">
+				<label for="latitude">latitude</label>
+				<input
+					id="latitude"
+					type="text"
+					bind:value={selectedPlace.latitude}
+					required
+					pattern="^[0-9]*\.[0-9]*$"
+				/>
+			</div>
+			<div class="lonBox">
+				<label for="longitude">longitude</label>
+				<input
+					id="longitude"
+					type="text"
+					bind:value={selectedPlace.longitude}
+					required
+					pattern="^[0-9]*\.[0-9]*$"
+					/>
+			</div>
             {#if $myCoords}
-                <button type="button" on:click={useCurrentLocation}
-                    >USE MY LOCATION</button
-                >
+				<div class="locationButtonBox">
+					<button type="button" class="material-icons" on:click={useCurrentLocation}
+						>near_me</button
+					>
+				</div>
             {/if}
+
         </form>
     {/if}
 </main>
 
 <style>
-    main {
+main {
     padding: 1rem;
 	overflow: auto;
 }
@@ -234,52 +244,77 @@ ul {
     margin: 0;
     padding: 0;
 }
-
-section div {
-display: flex;
-align-items: center;
-justify-content: space-between;
+li:not(:first-child):not(:last-child) {
+	padding-inline-start: 4rem;
 }
-section div button {
-    height: min-content;
-}
-    li {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding-left: 1.5rem;
 }
- 
-button.align-left {
-margin-left: 0;
+li.selected {
+	background-color: rgba(0, 0, 0, 0.05);
+	border-radius: 0.5rem;
 }
-    form {
-        display: grid;
-        grid-template-rows: 2fr 1fr 1fr;
-        grid-template-columns: 25% 75%;
-        grid-template-areas: 'h h' 'latn latc' 'lonn lonc';
-        border-radius: 0.6rem;
-        box-shadow: -2px -2px 4px 0px #ffffff, 2px 2px 4px 0px #00000025;
-    padding: 1rem;
-    }
-    form #name {
-        font-size: 2rem;
-        grid-area: h;
-    }
+form {
+	display: grid;
+	grid-template-rows: auto 1fr 3fr 1fr;
+	grid-template-columns: 4fr 4fr 2fr;
+	grid-template-areas:
+		'buttons buttons buttons'
+		'title image image'
+		'description image image'
+		'lat lon locationButton';
+	grid-row-gap: 1rem;
+	grid-column-gap: 1rem;
+	border-radius: 0.6rem;
+	box-shadow: -2px -2px 4px 0px #ffffff, 2px 2px 4px 0px #00000025;
+    padding: 0.5rem;
+}
+form .buttonBox {
+	display: flex;
+	justify-content: flex-end;
+	grid-area: buttons;
+}
+form .buttonBox button {
+	font-size: 0.9rem;
+	margin: 0;
+	margin-inline-start: 0.5rem;
+}
+form .titleBox {
+	grid-area: title;
+}
+form .descriptionBox {
+	grid-area: description;
+}
+form .imageBox {
+	grid-area: image;
+}
+form .latBox {
+	grid-area: lat;
+}
+form .lonBox {
+	grid-area: lon;
+}
+form .locationButtonBox {
+	grid-area: locationButton;
+}
+form > div {
+	overflow: hidden;
+}
+li:not(:first-child):not(:last-child) button{
+	font-size: 0.9em;
+	margin-inline-end: calc(0.5rem + 0.4rem);
+}
 button {
     background-color: var(--primary);
-    border-radius: 6px;
-    color: white;
+    border-radius: 50%;
+    color: var(--primary-contrast);
     text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    width: max-content;
-    padding: 0.2rem 1rem;
+    padding: 0.5rem;
     margin: 0.5rem;
     border: none;
     outline: none;
 }
-    button span {
-        margin-right: 0.2rem;
-    }
 </style>
