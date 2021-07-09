@@ -18,8 +18,11 @@
                 return;
             }
             const hostname = window.location.hostname;
-            let addMeURL = hostname === 'localhost' ? 'http://localhost' : `https://${hostname}`;
-            addMeURL += `/create/addUser/${uid}`
+            let addMeURL =
+                hostname === 'localhost'
+                    ? 'http://localhost'
+                    : `https://${hostname}`;
+            addMeURL += `/create/addUser/${uid}`;
             writeQrCode(addMeURL);
         });
     });

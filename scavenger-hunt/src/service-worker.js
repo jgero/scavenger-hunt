@@ -72,6 +72,9 @@ self.addEventListener('fetch', (event) => {
     if (url.pathname.includes('Firestore/Listen')) {
         return;
     }
+    if (url.pathname.includes('webpage-jgero.appspot.com')) {
+        return;
+    }
 
     if (isHttp && !isDevServerRequest && !skipBecauseUncached) {
         event.respondWith(

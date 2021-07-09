@@ -89,7 +89,7 @@
         overflow: hidden;
         padding: 1rem;
         box-sizing: border-box;
-        display:flex;
+        display: flex;
         flex-direction: column;
     }
 </style>
