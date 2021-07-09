@@ -57,7 +57,7 @@
     });
 
     async function savePlace() {
-        const { name, latitude, longitude, id } = selectedPlace;
+        const { name, latitude, longitude, id, description } = selectedPlace;
         if (form.checkValidity()) {
             route.lastEdit = new Date();
             let index = route.places.findIndex((el) => el.id === id);
@@ -65,6 +65,7 @@
                 route.places[index] = {
                     latitude: parseFloat(latitude),
                     longitude: parseFloat(longitude),
+					description,
                     name,
                     id,
                 };
@@ -72,6 +73,7 @@
                 route.places.push({
                     latitude: parseFloat(latitude),
                     longitude: parseFloat(longitude),
+					description,
                     name,
                     id,
                 });
@@ -81,9 +83,11 @@
                 .collection('routes')
                 .doc($userId)
                 .set(route);
+			if (newImageDataUrl) {
                 console.log(newImageDataUrl)
-            await firebase.storage().ref().child(`${$userId}/${id}`).putString(newImageDataUrl,
-            'data_url');
+				await firebase.storage().ref().child(`${$userId}/${id}`).putString(newImageDataUrl,
+					'data_url');
+			}
             logger.log({
                 logLevel: 'log',
                 message: `route updated`,
@@ -191,6 +195,7 @@
 					)}>close</button>
 			</div>
 			<div class="titleBox">
+				<label for="name">Name</label>
 				<input
 					id="name"
 					type="text"
@@ -199,7 +204,13 @@
 					pattern="^[0-9a-zA-ZäöüÄÖÜß _-]*$"
 				/>
 			</div>
-			<div class="descriptionBox"></div>
+			<div class="descriptionBox">
+				<label for="description">Beschreibung</label>
+				<textarea
+					id="description"
+					bind:value={selectedPlace.description}
+				/>
+			</div>
 			<div class="imageBox">
 				<ImageCapture bind:imageDataUrl={newImageDataUrl} altImageUrlPromise={getImageForPlace} />
 			</div>
@@ -272,8 +283,36 @@ form {
 	box-shadow: -2px -2px 4px 0px #ffffff, 2px 2px 4px 0px #00000025;
     padding: 0.5rem;
 }
-form .buttonBox {
+form > div {
+	overflow: hidden;
 	display: flex;
+	flex-direction: column;
+}
+form label {
+	font-size: 0.8rem;
+}
+form input[type="text"],
+form textarea {
+	box-sizing: border-box;
+	margin: 0;
+	border: none;
+	border-radius: 0.2rem;
+	outline: none;
+	width: 100%;
+	border-bottom: 1px solid transparent;
+	transition: all 0.1s ease-out;
+}
+form textarea {
+	resize: none;
+	flex: 1;
+}
+form input[type="text"]:focus,
+form textarea:focus {
+	border-bottom: 1px solid var(--primary);
+}
+form > div.buttonBox {
+	display: flex;
+	flex-direction: row;
 	justify-content: flex-end;
 	grid-area: buttons;
 }
@@ -299,9 +338,13 @@ form .lonBox {
 }
 form .locationButtonBox {
 	grid-area: locationButton;
+	justify-self: end;
+	align-self: end;
 }
-form > div {
-	overflow: hidden;
+form .locationButtonBox button {
+	font-size: 0.9rem;
+	padding: 0.5rem;
+	margin: 0;
 }
 li:not(:first-child):not(:last-child) button{
 	font-size: 0.9em;
