@@ -4,6 +4,7 @@ import { getLogger } from "../stores/debug-logger";
 
 export let imageDataUrl;
 export let altImageUrlPromise;
+export let imageId;
 
 let fileChooserElement;
 let logger;
@@ -39,8 +40,8 @@ function imageInputChanged() {
 		<input id="imgSelect" on:change={imageInputChanged} bind:this={fileChooserElement} type="file" accept="image/*">
 		{#if imageDataUrl}
 			<img src={imageDataUrl} alt="user chosen file">
-		{:else}
-			{#await altImageUrlPromise()}
+		{:else if altImageUrlPromise}
+			{#await altImageUrlPromise(imageId)}
 				<img src="images/placeholder.jpg" alt="missing">
 			{:then url}
 				{#if url}
@@ -49,6 +50,8 @@ function imageInputChanged() {
 					<img src="images/placeholder.jpg" alt="missing">
 				{/if}
 			{/await}
+		{:else}
+			<img src="images/placeholder.jpg" alt="missing">
 		{/if}
 	</div>
 </div>

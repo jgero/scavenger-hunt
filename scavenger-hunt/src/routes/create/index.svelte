@@ -10,7 +10,7 @@
 
     let logger, myCoords, userId;
     let route, selectedPlace, form;
-    let newImageDataUrl;
+    let newImageDataUrl = "";
 
     let unsubSnapshotListener;
     let unsubscribe;
@@ -84,7 +84,6 @@
                 .doc($userId)
                 .set(route);
 			if (newImageDataUrl) {
-                console.log(newImageDataUrl)
 				await firebase.storage().ref().child(`${$userId}/${id}`).putString(newImageDataUrl,
 					'data_url');
 			}
@@ -128,6 +127,7 @@
     function setupNewLocation() {
         selectedPlace = {
             name: '',
+			description: '',
             id: Math.random().toString().substr(2, 12),
         };
         if ($myCoords) {
@@ -137,12 +137,12 @@
             selectedPlace.longitude = '';
         }
     }
-
-	async function getImageForPlace() {
+	
+	async function getImageForPlace(id) {
 		let url = null;
 		try {
             url = await firebase.storage().ref()
-                            .child(`${$userId}/${selectedPlace.id}`).getDownloadURL();
+                            .child(`${$userId}/${id}`).getDownloadURL();
 		} catch (e) {
 			logger.log({
 				logLevel: 'error',
@@ -212,7 +212,8 @@
 				/>
 			</div>
 			<div class="imageBox">
-				<ImageCapture bind:imageDataUrl={newImageDataUrl} altImageUrlPromise={getImageForPlace} />
+				<ImageCapture bind:imageDataUrl={newImageDataUrl}
+					altImageUrlPromise={getImageForPlace} bind:imageId={selectedPlace.id} />
 			</div>
 			<div class="latBox">
 				<label for="latitude">latitude</label>
