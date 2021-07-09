@@ -110,6 +110,27 @@
         });
     }
 
+	async function movePlaceUp(index) {
+		[route.places[index], route.places[index - 1]] = [route.places[index - 1],
+	route.places[index]];
+        route.lastEdit = new Date();
+        await firebase.firestore().collection('routes').doc($userId).set(route);
+        logger.log({
+            logLevel: 'log',
+            message: 'updated place order',
+        });
+}
+	async function movePlaceDown(index) {
+		[route.places[index], route.places[index + 1]] = [route.places[index + 1],
+	route.places[index]];
+        route.lastEdit = new Date();
+        await firebase.firestore().collection('routes').doc($userId).set(route);
+        logger.log({
+            logLevel: 'log',
+            message: 'updated place order',
+        });
+}
+
    async function resetSearchers() {
         route.searchers = [];
         await firebase.firestore().collection('routes').doc($userId).set(route);
@@ -166,22 +187,26 @@
 
 <main>
 	{#if route && route.places}
-		<ul>
+		<ol type="1">
 			<li>
 				<h2>Stationen</h2>
 				<button class="material-icons" on:click={setupNewLocation}>add</button>
 			</li>
-			{#each route.places as place}
+			{#each route.places as place, index}
 				<li class:selected={selectedPlace && selectedPlace.id === place.id}>
 					{place.name}
-					<button on:click={() => (selectedPlace = place)} class="material-icons">edit</button>
+					<div>
+						<button on:click={() => movePlaceUp(index)} class="material-icons" disabled={index === 0}>arrow_upward</button>
+						<button on:click={() => movePlaceDown(index)} class="material-icons" disabled={index >= route.places.length - 1}>arrow_downward</button>
+						<button on:click={() => (selectedPlace = place)} class="material-icons">edit</button>
+					</div>
 				</li>
 			{/each}
 			<li>
 				<h2>Teilnehmer: {route.searchers ? route.searchers.length : 0}</h2>
 				<button class="material-icons" on:click={resetSearchers}>person_off</button>
 			</li>
-		</ul>
+		</ol>
 	{/if}
 
     {#if selectedPlace}
@@ -252,12 +277,20 @@ main {
     padding: 1rem;
 	overflow: auto;
 }
-ul {
+ol {
     margin: 0;
     padding: 0;
+	counter-reset: places;
 }
 li:not(:first-child):not(:last-child) {
 	padding-inline-start: 4rem;
+	position: relative;
+}
+li:not(:first-child):not(:last-child)::before {
+	position: absolute;
+	right: calc(100% - 3.5rem);
+	counter-increment: places;
+	content: counter(places) ". ";
 }
 li {
     display: flex;
@@ -347,9 +380,12 @@ form .locationButtonBox button {
 	padding: 0.5rem;
 	margin: 0;
 }
+li:not(:first-child):not(:last-child) div {
+	margin-inline-end: calc(0.5rem + 0.4rem);
+}
 li:not(:first-child):not(:last-child) button{
 	font-size: 0.9em;
-	margin-inline-end: calc(0.5rem + 0.4rem);
+	margin-inline: 0.1rem;
 }
 button {
     background-color: var(--primary);
@@ -360,5 +396,8 @@ button {
     margin: 0.5rem;
     border: none;
     outline: none;
+}
+button:disabled {
+	opacity: 0.4;
 }
 </style>
