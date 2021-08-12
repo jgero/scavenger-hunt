@@ -62,7 +62,7 @@ scavenger_build_prod:
 	$(call build_prod,scavenger-hunt)
 #-------------------------------------------------------------------------------#
 # push
-push: scavenger_push
+push: build scavenger_push
 # push scavenger-hunt
 .PHONY: scavenger_push
 scavenger_push:
