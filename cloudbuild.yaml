@@ -23,7 +23,4 @@ steps:
   args:
     - 'deploy'
 images:
-- 'eu.gcr.io/webpage-jgero/portfolio-page:latest'
-- 'eu.gcr.io/webpage-jgero/space-page:latest'
 - 'eu.gcr.io/webpage-jgero/scavenger-hunt-page:latest'
-- 'eu.gcr.io/webpage-jgero/main-page:latest'
