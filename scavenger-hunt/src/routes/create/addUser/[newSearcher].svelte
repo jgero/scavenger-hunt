@@ -58,9 +58,9 @@
 	{#if !$userId || !newSearcher}
 		<h1>loading...</h1>
 	{:else}
-		<h1>Adding user {$userId} to route</h1>
+		<h1>Benutzer {$userId} wird hinzugefügt...</h1>
 	{/if}
 {:else}
-	<h1>User {$userId} added to route</h1>
+	<h1>Benutzer {$userId} wurde hinzugefügt</h1>
 	<a href="/create">OK</a>
 {/if}
